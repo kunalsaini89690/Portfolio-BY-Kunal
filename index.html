@@ -31,14 +31,27 @@
             position: sticky; top: 0; z-index: 100;
         }
         .nav-inner { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Cinzel', serif; font-weight: 700; font-size: 22px; color: #fff; text-decoration: none; letter-spacing: 2px; }
+        .logo { font-family: 'Cinzel', serif; font-weight: 700; font-size: 22px; color: #fff; text-decoration: none; letter-spacing: 2px; cursor: pointer; }
         .nav-links { display: flex; gap: 25px; list-style: none; }
         .nav-links a {
             text-decoration: none; color: #ccc; font-size: 13px;
             font-weight: 500; text-transform: uppercase; letter-spacing: 1px;
-            transition: 0.3s;
+            transition: 0.3s; cursor: pointer;
         }
         .nav-links a:hover { color: #F2F0E6; text-shadow: 0 0 8px rgba(242, 240, 230, 0.6); }
+
+        /* Page Switching System (SPA) */
+        .page-view {
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+        .page-view.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* Hero Banner Section */
         .hero-banner-section {
@@ -91,10 +104,36 @@
             font-family: 'Cinzel', serif; font-size: 24px;
             letter-spacing: 3px; color: #fff; text-transform: uppercase;
         }
+        .section-title p {
+            color: #888; font-size: 13px; margin-top: 8px;
+        }
         .section-title::after {
             content: ''; display: block; width: 50px; height: 2px;
             background: #F2F0E6; margin: 10px auto 0;
             box-shadow: 0 0 8px rgba(242, 240, 230, 0.8);
+        }
+
+        /* Sub-group Divider Heading inside My Work */
+        .gallery-group-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 35px 0 22px;
+        }
+        .gallery-group-header span {
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            color: #F2F0E6;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .gallery-group-header::after {
+            content: '';
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(to right, rgba(242, 240, 230, 0.35), rgba(255, 255, 255, 0.05));
         }
 
         /* Services I Provide Section */
@@ -184,6 +223,7 @@
         .work-card {
             background: #141414; border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px; overflow: hidden; transition: 0.4s ease;
+            cursor: pointer; height: 100%; display: flex; flex-direction: column;
         }
         .work-card:hover { 
             transform: translateY(-6px); 
@@ -191,10 +231,338 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.7), 0 0 15px rgba(242, 240, 230, 0.3);
         }
         .work-thumb { width: 100%; height: 180px; object-fit: cover; }
-        .work-content { padding: 20px; }
+        .work-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .work-category { font-size: 10px; font-family: 'Cinzel', serif; letter-spacing: 2px; color: #F2F0E6; text-transform: uppercase; font-weight: bold; }
         .work-title { font-size: 16px; font-weight: 600; color: #fff; margin: 5px 0 10px; }
         .work-desc { font-size: 12px; color: #888; margin-bottom: 15px; }
+        .card-cta { font-size: 12px; color: #F2F0E6; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: 0.3s; }
+        .work-card:hover .card-cta { transform: translateX(4px); text-shadow: 0 0 8px rgba(242, 240, 230, 0.5); }
+
+        /* Sub-Page Top Bar & Video Galleries */
+        .subpage-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 35px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .back-home-btn {
+            background: transparent;
+            color: #F2F0E6;
+            border: 1px solid rgba(242, 240, 230, 0.4);
+            padding: 9px 20px;
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .back-home-btn:hover {
+            background: #F2F0E6;
+            color: #0d0d0d;
+            box-shadow: 0 0 15px rgba(242, 240, 230, 0.5);
+        }
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+        }
+        .tab-pill {
+            background: #141414;
+            color: #aaa;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .tab-pill:hover, .tab-pill.active-pill {
+            border-color: #F2F0E6;
+            color: #0d0d0d;
+            background: #F2F0E6;
+        }
+
+        /* Video Showcase Grid inside Sub-Pages */
+        .video-showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        .video-showcase-grid.wide-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .video-showcase-grid.reels-two-col {
+            grid-template-columns: repeat(2, 300px);
+            justify-content: center;
+            gap: 35px;
+        }
+        .showcase-item {
+            background: #141414;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: 0.4s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .showcase-item:hover {
+            transform: translateY(-5px);
+            border-color: #F2F0E6;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.8), 0 0 15px rgba(242, 240, 230, 0.25);
+        }
+        .ratio-reel {
+            position: relative;
+            padding-bottom: 177.77%; /* 9:16 Vertical Reels */
+            height: 0;
+            background: #050505;
+            overflow: hidden;
+        }
+        .ratio-wide {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Horizontal Edits */
+            height: 0;
+            background: #050505;
+            overflow: hidden;
+        }
+
+        /* Thumbnail Poster + Play Overlay inside Gallery Cards */
+        .yt-thumb-img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease, filter 0.4s ease;
+        }
+        .showcase-item:hover .yt-thumb-img {
+            transform: scale(1.06);
+            filter: brightness(0.75);
+        }
+        .play-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.3) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s ease;
+        }
+        .play-circle-btn {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            background: rgba(13, 13, 13, 0.75);
+            backdrop-filter: blur(6px);
+            border: 1.5px solid #F2F0E6;
+            color: #F2F0E6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            padding-left: 3px;
+            box-shadow: 0 0 20px rgba(242, 240, 230, 0.35);
+            transition: all 0.3s ease;
+        }
+        .showcase-item:hover .play-circle-btn {
+            background: #F2F0E6;
+            color: #0d0d0d;
+            transform: scale(1.12);
+            box-shadow: 0 0 28px rgba(242, 240, 230, 0.8);
+        }
+
+        .video-placeholder-box {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: #666; text-align: center; padding: 20px;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
+        }
+        .video-placeholder-box i {
+            font-size: 32px; color: rgba(242, 240, 230, 0.4); margin-bottom: 10px;
+        }
+        .video-placeholder-box span {
+            font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+        }
+        .showcase-meta { padding: 18px; }
+        .showcase-tag { font-size: 10px; font-family: 'Cinzel', serif; color: #F2F0E6; letter-spacing: 2px; font-weight: 700; }
+        .showcase-title { font-size: 15px; font-weight: 600; color: #fff; margin-top: 4px; }
+
+        /* ========================================================= */
+        /* CINEMA LIGHTBOX POPUP & MINI-PLAYER (I / F SHORTCUTS)     */
+        /* ========================================================= */
+        .cinema-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 5, 5, 0.9);
+            backdrop-filter: blur(12px);
+            z-index: 998;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .cinema-backdrop.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .cinema-player-shell {
+            position: fixed;
+            z-index: 999;
+            background: #0d0d0d;
+            border: 1px solid rgba(242, 240, 230, 0.45);
+            border-radius: 12px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95), 0 0 30px rgba(242, 240, 230, 0.2);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* Center Lightbox Mode */
+        .cinema-player-shell.mode-lightbox {
+            display: flex;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            width: 420px; /* Vertical 9:16 default width */
+            max-width: 92vw;
+        }
+        .cinema-player-shell.mode-lightbox.is-wide {
+            width: 920px;
+        }
+
+        /* Minimized Corner Mode (Pressed 'I') */
+        .cinema-player-shell.mode-mini {
+            display: flex;
+            top: auto;
+            left: auto;
+            bottom: 24px;
+            right: 24px;
+            transform: translate(0, 0) scale(1);
+            width: 240px;
+            border-color: #F2F0E6;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 20px rgba(242, 240, 230, 0.35);
+        }
+        .cinema-player-shell.mode-mini.is-wide {
+            width: 340px;
+        }
+
+        /* Fullscreen Mode (Pressed 'F') */
+        .cinema-player-shell.mode-fullscreen {
+            display: flex;
+            top: 0;
+            left: 0;
+            transform: none;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            border: none;
+        }
+
+        .player-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: #141414;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            z-index: 5;
+        }
+        .player-now-playing {
+            font-size: 11px;
+            font-family: 'Cinzel', serif;
+            color: #F2F0E6;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 65%;
+        }
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .p-ctrl-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #ddd;
+            width: 28px;
+            height: 28px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: 0.25s;
+        }
+        .p-ctrl-btn:hover {
+            background: #F2F0E6;
+            color: #0d0d0d;
+            border-color: #F2F0E6;
+        }
+
+        /* Clean Title-Free Video Frame Mask */
+        .clean-frame-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 177.77%; /* 9:16 Vertical */
+            background: #000;
+            overflow: hidden;
+        }
+        .cinema-player-shell.is-wide .clean-frame-container {
+            padding-bottom: 56.25%; /* 16:9 Wide */
+        }
+        .cinema-player-shell.mode-fullscreen .clean-frame-container {
+            padding-bottom: 0;
+            flex-grow: 1;
+            height: calc(100vh - 48px);
+        }
+
+        /* Slight vertical crop hides YouTube's top title bar & channel icon cleanly */
+        .clean-frame-container iframe {
+            position: absolute;
+            top: -58px;
+            left: 0;
+            width: 100%;
+            height: calc(100% + 116px);
+            border: 0;
+        }
+        .cinema-player-shell.mode-mini .clean-frame-container iframe {
+            top: -40px;
+            height: calc(100% + 80px);
+        }
+
+        .player-shortcut-hint {
+            background: #111;
+            color: #777;
+            font-size: 10px;
+            text-align: center;
+            padding: 6px 10px;
+            letter-spacing: 0.8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .cinema-player-shell.mode-mini .player-shortcut-hint {
+            display: none;
+        }
+        .kbd-badge {
+            background: #222;
+            color: #F2F0E6;
+            padding: 1px 5px;
+            border-radius: 3px;
+            border: 1px solid rgba(242, 240, 230, 0.25);
+            font-weight: 600;
+        }
 
         /* Skills Tags */
         .skills-wrapper { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
@@ -238,142 +606,619 @@
     <!-- Navigation Header -->
     <header class="header">
         <div class="container nav-inner">
-            <a href="#" class="logo">KUNAL SAINI</a>
+            <a onclick="openPage('home-page')" class="logo">KUNAL SAINI</a>
             <ul class="nav-links">
-                <li><a href="#hero">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#showreel">Showreel</a></li>
-                <li><a href="#works">Works</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a onclick="goToSection('hero')">Home</a></li>
+                <li><a onclick="goToSection('services')">Services</a></li>
+                <li><a onclick="goToSection('showreel')">Showreel</a></li>
+                <li><a onclick="goToSection('works')">Works</a></li>
+                <li><a onclick="goToSection('skills')">Skills</a></li>
+                <li><a onclick="goToSection('contact')">Contact</a></li>
             </ul>
         </div>
     </header>
 
     <div class="container">
-        
-        <!-- Main Hero Banner Section -->
-        <section class="hero-banner-section" id="hero">
-            <img src="IMG_20260802_115639.png" alt="Kunal Saini Creative Portfolio" class="hero-img">
+
+        <!-- ========================================================= -->
+        <!-- MAIN HOME PAGE VIEW                                       -->
+        <!-- ========================================================= -->
+        <main id="home-page" class="page-view active">
             
-            <!-- Quick Info & Contact Links -->
-            <div class="quick-contact-bar">
-                <a href="https://instagram.com/kunal.29.29" target="_blank" class="quick-item"><i class="fab fa-instagram"></i> kunal.29.29</a>
-                <a href="https://wa.me/919870968529" target="_blank" class="quick-item"><i class="fab fa-whatsapp"></i> +91 98709 68529</a>
-                <span class="quick-item"><i class="fas fa-map-marker-alt"></i> Meerut, UP</span>
-            </div>
-        </section>
-
-        <!-- Services I Provide Section -->
-        <section id="services" class="services-section">
-            <h2 class="services-title">Services I Provide</h2>
-            <div class="services-grid">
+            <!-- Main Hero Banner Section -->
+            <section class="hero-banner-section" id="hero">
+                <img src="IMG_20260802_115639.png" alt="Kunal Saini Creative Portfolio" class="hero-img">
                 
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-video"></i></div>
-                    <h3 class="service-heading">Editing</h3>
-                    <p class="service-desc">Video editing crafts footage into engaging narratives with smooth transitions.</p>
+                <!-- Quick Info & Contact Links -->
+                <div class="quick-contact-bar">
+                    <a href="https://instagram.com/kunal.29.29" target="_blank" class="quick-item"><i class="fab fa-instagram"></i> kunal.29.29</a>
+                    <a href="https://wa.me/919870968529" target="_blank" class="quick-item"><i class="fab fa-whatsapp"></i> +91 98709 68529</a>
+                    <span class="quick-item"><i class="fas fa-map-marker-alt"></i> Meerut, UP</span>
+                </div>
+            </section>
+
+            <!-- Services I Provide Section -->
+            <section id="services" class="services-section">
+                <h2 class="services-title">Services I Provide</h2>
+                <div class="services-grid">
+                    
+                    <div class="service-card">
+                        <div class="service-icon"><i class="fas fa-video"></i></div>
+                        <h3 class="service-heading">Editing</h3>
+                        <p class="service-desc">Video editing crafts footage into engaging narratives with smooth transitions.</p>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon"><i class="fas fa-play-circle"></i></div>
+                        <h3 class="service-heading">Motion</h3>
+                        <p class="service-desc">Motion Design brings static visuals to life.</p>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon"><i class="fas fa-adjust"></i></div>
+                        <h3 class="service-heading">Grading</h3>
+                        <p class="service-desc">Color Grading enriches visuals with mood and depth.</p>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Featured Showreel Section -->
+            <section id="showreel">
+                <div class="section-title">
+                    <h2>Featured Showreel</h2>
+                </div>
+                <div class="showreel-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Kunal Saini Showreel" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Selected Works Section (3 Clickable Columns) -->
+            <section id="works">
+                <div class="section-title">
+                    <h2>Selected Works</h2>
+                </div>
+                <div class="portfolio-grid">
+                    
+                    <!-- Card 1: High-Energy AMV Cut -->
+                    <div class="work-card" onclick="openPage('amv-page')">
+                        <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop" alt="AMV Edit" class="work-thumb">
+                        <div class="work-content">
+                            <div>
+                                <span class="work-category">Anime Music Video</span>
+                                <h3 class="work-title">High-Energy AMV Cut</h3>
+                                <p class="work-desc">Velocity editing, custom color grading, and precise audio syncing.</p>
+                            </div>
+                            <span class="card-cta">Watch Videos →</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: During Internship -->
+                    <div class="work-card" onclick="openPage('internship-page')">
+                        <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&auto=format&fit=crop" alt="During Internship" class="work-thumb">
+                        <div class="work-content">
+                            <div>
+                                <span class="work-category">Agency & Client Projects</span>
+                                <h3 class="work-title">During Internship</h3>
+                                <p class="work-desc">Real client reels, B-roll sequences, color grading, and short-form cuts crafted during my internship.</p>
+                            </div>
+                            <span class="card-cta">View Internship Work →</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: My Work -->
+                    <div class="work-card" onclick="openPage('mywork-page')">
+                        <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=600&auto=format&fit=crop" alt="My Work" class="work-thumb">
+                        <div class="work-content">
+                            <div>
+                                <span class="work-category">Personal & Creative Edits</span>
+                                <h3 class="work-title">My Work</h3>
+                                <p class="work-desc">Dark cinematic aesthetics, gaming montages, sound design, and signature creative edits.</p>
+                            </div>
+                            <span class="card-cta">Explore My Work →</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Skills Section -->
+            <section id="skills">
+                <div class="section-title">
+                    <h2>Software & Skills</h2>
+                </div>
+                <div class="skills-wrapper">
+                    <span class="skill-tag">Premiere Pro</span>
+                    <span class="skill-tag">After Effects</span>
+                    <span class="skill-tag">DaVinci Resolve</span>
+                    <span class="skill-tag">CapCut</span>
+                    <span class="skill-tag">Alight Motion</span>
+                    <span class="skill-tag">Velocity Editing</span>
+                    <span class="skill-tag">Color Grading</span>
+                    <span class="skill-tag">Sound Design & SFX</span>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact" style="text-align: center; padding: 40px 0 20px;">
+                <div class="section-title">
+                    <h2>Let's Collaborate</h2>
+                </div>
+                <p style="max-width: 500px; margin: 0 auto 25px; color: #aaa; font-size: 14px;">
+                    Have a video project in mind? Let's discuss your ideas and turn them into stunning visual edits.
+                </p>
+                <a href="https://wa.me/919870968529" class="btn-premium" target="_blank">Start a Project</a>
+            </section>
+
+        </main>
+
+
+        <!-- ========================================================= -->
+        <!-- PAGE 1: HIGH-ENERGY AMV CUTS                              -->
+        <!-- ========================================================= -->
+        <section id="amv-page" class="page-view">
+            <div class="subpage-topbar">
+                <button class="back-home-btn" onclick="openPage('home-page')"><i class="fas fa-arrow-left"></i> Back to Home</button>
+                <div class="category-tabs">
+                    <button class="tab-pill active-pill" onclick="openPage('amv-page')">AMV Cuts</button>
+                    <button class="tab-pill" onclick="openPage('internship-page')">During Internship</button>
+                    <button class="tab-pill" onclick="openPage('mywork-page')">My Work</button>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <h2>High-Energy AMV Cuts</h2>
+                <p>Velocity Sync • Shakes & Impact Frames • Custom Color Grading</p>
+            </div>
+
+            <div class="video-showcase-grid wide-grid">
+                <!-- AMV Slot 1 -->
+                <div class="showcase-item">
+                    <div class="ratio-wide">
+                        <div class="video-placeholder-box">
+                            <i class="fas fa-film"></i>
+                            <span>AMV Video Slot 01 (16:9)</span>
+                        </div>
+                    </div>
+                    <div class="showcase-meta">
+                        <span class="showcase-tag">VELOCITY & FLOW</span>
+                        <h3 class="showcase-title">Anime Action Edit — 01</h3>
+                    </div>
                 </div>
 
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-play-circle"></i></div>
-                    <h3 class="service-heading">Motion</h3>
-                    <p class="service-desc">Motion Design brings static visuals to life.</p>
+                <!-- AMV Slot 2 -->
+                <div class="showcase-item">
+                    <div class="ratio-wide">
+                        <div class="video-placeholder-box">
+                            <i class="fas fa-film"></i>
+                            <span>AMV Video Slot 02 (16:9)</span>
+                        </div>
+                    </div>
+                    <div class="showcase-meta">
+                        <span class="showcase-tag">DARK ATMOSPHERE</span>
+                        <h3 class="showcase-title">Anime Cinematic Cut — 02</h3>
+                    </div>
                 </div>
-
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-adjust"></i></div>
-                    <h3 class="service-heading">Grading</h3>
-                    <p class="service-desc">Color Grading enriches visuals with mood and depth.</p>
-                </div>
-
             </div>
         </section>
 
-        <!-- Featured Showreel Section -->
-        <section id="showreel">
-            <div class="section-title">
-                <h2>Featured Showreel</h2>
-            </div>
-            <div class="showreel-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Kunal Saini Showreel" allowfullscreen></iframe>
+
+        <!-- ========================================================= -->
+        <!-- PAGE 2: DURING INTERNSHIP (4 PROJECTS INTEGRATED)         -->
+        <!-- ========================================================= -->
+        <section id="internship-page" class="page-view">
+            <div class="subpage-topbar">
+                <button class="back-home-btn" onclick="openPage('home-page')"><i class="fas fa-arrow-left"></i> Back to Home</button>
+                <div class="category-tabs">
+                    <button class="tab-pill" onclick="openPage('amv-page')">AMV Cuts</button>
+                    <button class="tab-pill active-pill" onclick="openPage('internship-page')">During Internship</button>
+                    <button class="tab-pill" onclick="openPage('mywork-page')">My Work</button>
                 </div>
             </div>
-        </section>
 
-        <!-- Selected Works Section -->
-        <section id="works">
             <div class="section-title">
-                <h2>Selected Works</h2>
+                <h2>During Internship</h2>
+                <p>Client Deliverables • B-Roll Storytelling • Dark Aesthetic Reels</p>
             </div>
-            <div class="portfolio-grid">
+
+            <div class="video-showcase-grid">
                 
-                <div class="work-card">
-                    <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop" alt="AMV Edit" class="work-thumb">
-                    <div class="work-content">
-                        <span class="work-category">Anime Music Video</span>
-                        <h3 class="work-title">High-Energy AMV Cut</h3>
-                        <p class="work-desc">Velocity editing, custom color grading, and precise audio syncing.</p>
-                        <a href="#" class="quick-item" style="font-size: 12px;">Watch Video →</a>
+                <!-- Project 1 -->
+                <div class="showcase-item" onclick="openCinemaPlayer('VwPuB-1nR8U', 'Project 1', false)">
+                    <div class="ratio-reel">
+                        <img src="https://i.ytimg.com/vi/VwPuB-1nR8U/hqdefault.jpg" alt="Project 1" class="yt-thumb-img">
+                        <div class="play-overlay">
+                            <div class="play-circle-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-meta">
+                        <span class="showcase-tag">CLIENT PROJECT</span>
+                        <h3 class="showcase-title">Project 1</h3>
                     </div>
                 </div>
 
-                <div class="work-card">
-                    <img src="https://images.unsplash.com/photo-1536240478700-b869070f9279?w=600&auto=format&fit=crop" alt="Typography Reel" class="work-thumb">
-                    <div class="work-content">
-                        <span class="work-category">Reels & Short Form</span>
-                        <h3 class="work-title">Kinetic Typography Edit</h3>
-                        <p class="work-desc">Dynamic text animation, sound effects (SFX), and engaging layout.</p>
-                        <a href="#" class="quick-item" style="font-size: 12px;">Watch Video →</a>
+                <!-- Project 2 -->
+                <div class="showcase-item" onclick="openCinemaPlayer('w_FLEmmsoQk', 'Project 2', false)">
+                    <div class="ratio-reel">
+                        <img src="https://i.ytimg.com/vi/w_FLEmmsoQk/hqdefault.jpg" alt="Project 2" class="yt-thumb-img">
+                        <div class="play-overlay">
+                            <div class="play-circle-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-meta">
+                        <span class="showcase-tag">CLIENT PROJECT</span>
+                        <h3 class="showcase-title">Project 2</h3>
                     </div>
                 </div>
 
-                <div class="work-card">
-                    <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=600&auto=format&fit=crop" alt="Cinematic Edit" class="work-thumb">
-                    <div class="work-content">
-                        <span class="work-category">Cinematic Montage</span>
-                        <h3 class="work-title">Atmospheric Video Edit</h3>
-                        <p class="work-desc">Story flow, smooth transitions, and aesthetic visual composition.</p>
-                        <a href="#" class="quick-item" style="font-size: 12px;">Watch Video →</a>
+                <!-- Project 3 -->
+                <div class="showcase-item" onclick="openCinemaPlayer('R7TmZpIN_9o', 'Project 3', false)">
+                    <div class="ratio-reel">
+                        <img src="https://i.ytimg.com/vi/R7TmZpIN_9o/hqdefault.jpg" alt="Project 3" class="yt-thumb-img">
+                        <div class="play-overlay">
+                            <div class="play-circle-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-meta">
+                        <span class="showcase-tag">CLIENT PROJECT</span>
+                        <h3 class="showcase-title">Project 3</h3>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="showcase-item" onclick="openCinemaPlayer('MaXeOIY6-AY', 'Project 4', false)">
+                    <div class="ratio-reel">
+                        <img src="https://i.ytimg.com/vi/MaXeOIY6-AY/hqdefault.jpg" alt="Project 4" class="yt-thumb-img">
+                        <div class="play-overlay">
+                            <div class="play-circle-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-meta">
+                        <span class="showcase-tag">CLIENT PROJECT</span>
+                        <h3 class="showcase-title">Project 4</h3>
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- Skills Section -->
-        <section id="skills">
+
+        <!-- ========================================================= -->
+        <!-- PAGE 3: MY WORK (OPTION 2: SEPARATE REELS & WIDE ROWS)    -->
+        <!-- ========================================================= -->
+        <section id="mywork-page" class="page-view">
+            <div class="subpage-topbar">
+                <button class="back-home-btn" onclick="openPage('home-page')"><i class="fas fa-arrow-left"></i> Back to Home</button>
+                <div class="category-tabs">
+                    <button class="tab-pill" onclick="openPage('amv-page')">AMV Cuts</button>
+                    <button class="tab-pill" onclick="openPage('internship-page')">During Internship</button>
+                    <button class="tab-pill active-pill" onclick="openPage('mywork-page')">My Work</button>
+                </div>
+            </div>
+
             <div class="section-title">
-                <h2>Software & Skills</h2>
+                <h2>My Work</h2>
+                <p>Personal Edits • Gaming Videos • Sound Design & Color Grading</p>
             </div>
-            <div class="skills-wrapper">
-                <span class="skill-tag">CapCut</span>
-                <span class="skill-tag">Alight Motion</span>
-                <span class="skill-tag">Figma</span>
-                <span class="skill-tag">Velocity Editing</span>
-                <span class="skill-tag">Sound Design & SFX</span>
-                <span class="skill-tag">Typography & Motion Graphics</span>
+
+            <!-- ROW 1: VERTICAL REELS / SHORTS -->
+            <div class="gallery-group-header">
+                <span>Vertical Reels & Shorts</span>
+            </div>
+
+            <div class="video-showcase-grid reels-two-col">
+                
+                <!-- Project 1 (Vertical Short: NEbHS-brq7M) -->
+                <div class="showcase-item" onclick="openCinemaPlayer('NEbHS-brq7M', 'Project 1', false)">
+                    <div class="ratio-reel">
+                        <img src="https://i.ytimg.com/vi/NEbHS-brq7M/hqdefault.jpg" alt="Project 1" class="yt-thumb-img">
+                        <div class="play-overlay">
+                            <div class="play-circle-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-meta">
+                        <span class="showcase-tag">PERSONAL EDIT • 9:16</span>
+                        <h3 class="showcase-title">Project 1</h3>
+                    </div>
+                </div>
+
+                <!-- Project 2 (Vertical Short: yMy6fgtDXfg) -->
+                <div class="showcase-item" onclick="openCinemaPlayer('yMy6fgtDXfg', 'Project 2', false)">
+                    <div class="ratio-reel">
+                        <img src="https://i.ytimg.com/vi/yMy6fgtDXfg/hqdefault.jpg" alt="Project 2" class="yt-thumb-img">
+                        <div class="play-overlay">
+                            <div class="play-circle-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-meta">
+                        <span class="showcase-tag">PERSONAL EDIT • 9:16</span>
+                        <h3 class="showcase-title">Project 2</h3>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ROW 2: WIDESCREEN EDITS & VIDEOS -->
+            <div class="gallery-group-header">
+                <span>Widescreen Edits & Videos</span>
+            </div>
+
+            <div class="video-showcase-grid">
+
+                <!-- Project 3 (Widescreen Video: 1-VZBUsxMf0) -->
+                <div class="showcase-item" onclick="openCinemaPlayer('1-VZBUsxMf0', 'Project 3', true)">
+                    <div class="ratio-wide">
+                        <img src="https://i.ytimg.com/vi/1-VZBUsxMf0/hqdefault.jpg" alt="Project 3" class="yt-thumb-img">
+                        <div class="play-overlay">
+                            <div class="play-circle-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-meta">
+                        <span class="showcase-tag">PERSONAL EDIT • 16:9</span>
+                        <h3 class="showcase-title">Project 3</h3>
+                    </div>
+                </div>
+
+                <!-- Project 4 (Widescreen Video: PpLh-6MG9Ak) -->
+                <div class="showcase-item" onclick="openCinemaPlayer('PpLh-6MG9Ak', 'Project 4', true)">
+                    <div class="ratio-wide">
+                        <img src="https://i.ytimg.com/vi/PpLh-6MG9Ak/hqdefault.jpg" alt="Project 4" class="yt-thumb-img">
+                        <div class="play-overlay">
+                            <div class="play-circle-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-meta">
+                        <span class="showcase-tag">PERSONAL EDIT • 16:9</span>
+                        <h3 class="showcase-title">Project 4</h3>
+                    </div>
+                </div>
+
+                <!-- Project 5 (Widescreen Video: CBVOLYNiusI) -->
+                <div class="showcase-item" onclick="openCinemaPlayer('CBVOLYNiusI', 'Project 5', true)">
+                    <div class="ratio-wide">
+                        <img src="https://i.ytimg.com/vi/CBVOLYNiusI/hqdefault.jpg" alt="Project 5" class="yt-thumb-img">
+                        <div class="play-overlay">
+                            <div class="play-circle-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-meta">
+                        <span class="showcase-tag">PERSONAL EDIT • 16:9</span>
+                        <h3 class="showcase-title">Project 5</h3>
+                    </div>
+                </div>
+
+                <!-- Project 6 (Widescreen Video: 70oo6mmHETE) -->
+                <div class="showcase-item" onclick="openCinemaPlayer('70oo6mmHETE', 'Project 6', true)">
+                    <div class="ratio-wide">
+                        <img src="https://i.ytimg.com/vi/70oo6mmHETE/hqdefault.jpg" alt="Project 6" class="yt-thumb-img">
+                        <div class="play-overlay">
+                            <div class="play-circle-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-meta">
+                        <span class="showcase-tag">PERSONAL EDIT • 16:9</span>
+                        <h3 class="showcase-title">Project 6</h3>
+                    </div>
+                </div>
+
+                <!-- Project 7 (Widescreen Video: WSIct37XfRc) -->
+                <div class="showcase-item" onclick="openCinemaPlayer('WSIct37XfRc', 'Project 7', true)">
+                    <div class="ratio-wide">
+                        <img src="https://i.ytimg.com/vi/WSIct37XfRc/hqdefault.jpg" alt="Project 7" class="yt-thumb-img">
+                        <div class="play-overlay">
+                            <div class="play-circle-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-meta">
+                        <span class="showcase-tag">PERSONAL EDIT • 16:9</span>
+                        <h3 class="showcase-title">Project 7</h3>
+                    </div>
+                </div>
+
+                <!-- Project 8 (Widescreen Video: ZTAHOIBi7Dw) -->
+                <div class="showcase-item" onclick="openCinemaPlayer('ZTAHOIBi7Dw', 'Project 8', true)">
+                    <div class="ratio-wide">
+                        <img src="https://i.ytimg.com/vi/ZTAHOIBi7Dw/hqdefault.jpg" alt="Project 8" class="yt-thumb-img">
+                        <div class="play-overlay">
+                            <div class="play-circle-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-meta">
+                        <span class="showcase-tag">PERSONAL EDIT • 16:9</span>
+                        <h3 class="showcase-title">Project 8</h3>
+                    </div>
+                </div>
+
+                <!-- Project 9 (Widescreen Video: ktMkL--hRHQ) -->
+                <div class="showcase-item" onclick="openCinemaPlayer('ktMkL--hRHQ', 'Project 9', true)">
+                    <div class="ratio-wide">
+                        <img src="https://i.ytimg.com/vi/ktMkL--hRHQ/hqdefault.jpg" alt="Project 9" class="yt-thumb-img">
+                        <div class="play-overlay">
+                            <div class="play-circle-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-meta">
+                        <span class="showcase-tag">PERSONAL EDIT • 16:9</span>
+                        <h3 class="showcase-title">Project 9</h3>
+                    </div>
+                </div>
+
             </div>
         </section>
 
-        <!-- Contact Section -->
-        <section id="contact" style="text-align: center; padding: 40px 0 20px;">
-            <div class="section-title">
-                <h2>Let's Collaborate</h2>
-            </div>
-            <p style="max-width: 500px; margin: 0 auto 25px; color: #aaa; font-size: 14px;">
-                Have a video project in mind? Let's discuss your ideas and turn them into stunning visual edits.
-            </p>
-            <a href="https://wa.me/919870968529" class="btn-premium" target="_blank">Start a Project</a>
-        </section>
 
         <!-- Footer -->
         <footer class="footer">
-            <p>&copy; 2026 Kunal Saini. All Rights Reserved.</p>
+            <p>© 2026 Kunal Saini. All Rights Reserved.</p>
         </footer>
 
     </div>
+
+    <!-- ========================================================= -->
+    <!-- CINEMA LIGHTBOX & FLOATING MINI-PLAYER                    -->
+    <!-- ========================================================= -->
+    <div id="cinema-backdrop" class="cinema-backdrop" onclick="closeCinemaPlayer()"></div>
+
+    <div id="cinema-shell" class="cinema-player-shell">
+        <div class="player-topbar">
+            <span id="player-title-label" class="player-now-playing">NOW PLAYING</span>
+            <div class="player-controls">
+                <button class="p-ctrl-btn" title="Minimize / Expand (Shortcut: I)" onclick="toggleMiniPlayer()">
+                    <i id="mini-icon" class="fas fa-compress-alt"></i>
+                </button>
+                <button class="p-ctrl-btn" title="Fullscreen (Shortcut: F)" onclick="toggleFullPlayer()">
+                    <i id="full-icon" class="fas fa-expand"></i>
+                </button>
+                <button class="p-ctrl-btn" title="Close (Shortcut: ESC)" onclick="closeCinemaPlayer()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="clean-frame-container">
+            <iframe id="cinema-iframe" src="" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+        </div>
+
+        <div class="player-shortcut-hint">
+            Press <span class="kbd-badge">I</span> Minimize  •  <span class="kbd-badge">F</span> Fullscreen  •  <span class="kbd-badge">ESC</span> Close
+        </div>
+    </div>
+
+    <!-- Single-Page & Cinema Player Script -->
+    <script>
+        function openPage(pageId) {
+            document.querySelectorAll('.page-view').forEach(page => {
+                page.classList.remove('active');
+            });
+            const target = document.getElementById(pageId);
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function goToSection(sectionId) {
+            openPage('home-page');
+            setTimeout(() => {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 50);
+        }
+
+        // Cinema Player State
+        let playerMode = 'closed'; // 'closed' | 'lightbox' | 'mini' | 'fullscreen'
+        const shell = document.getElementById('cinema-shell');
+        const backdrop = document.getElementById('cinema-backdrop');
+        const iframe = document.getElementById('cinema-iframe');
+        const titleLabel = document.getElementById('player-title-label');
+        const miniIcon = document.getElementById('mini-icon');
+        const fullIcon = document.getElementById('full-icon');
+
+        function openCinemaPlayer(videoId, displayTitle, isWide = false) {
+            titleLabel.textContent = displayTitle.toUpperCase();
+            
+            if (isWide) {
+                shell.classList.add('is-wide');
+            } else {
+                shell.classList.remove('is-wide');
+            }
+
+            // Clean autoplay embed without related videos or annotations
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1&loop=1&playlist=${videoId}`;
+
+            setPlayerMode('lightbox');
+        }
+
+        function setPlayerMode(mode) {
+            playerMode = mode;
+            shell.classList.remove('mode-lightbox', 'mode-mini', 'mode-fullscreen');
+            backdrop.classList.remove('visible');
+
+            if (mode === 'lightbox') {
+                shell.classList.add('mode-lightbox');
+                backdrop.classList.add('visible');
+                miniIcon.className = 'fas fa-compress-alt';
+                fullIcon.className = 'fas fa-expand';
+            } else if (mode === 'mini') {
+                shell.classList.add('mode-mini');
+                miniIcon.className = 'fas fa-expand-alt';
+                fullIcon.className = 'fas fa-expand';
+            } else if (mode === 'fullscreen') {
+                shell.classList.add('mode-fullscreen');
+                backdrop.classList.add('visible');
+                miniIcon.className = 'fas fa-compress-alt';
+                fullIcon.className = 'fas fa-compress';
+            } else {
+                iframe.src = '';
+            }
+        }
+
+        function toggleMiniPlayer() {
+            if (playerMode === 'closed') return;
+            setPlayerMode(playerMode === 'mini' ? 'lightbox' : 'mini');
+        }
+
+        function toggleFullPlayer() {
+            if (playerMode === 'closed') return;
+            setPlayerMode(playerMode === 'fullscreen' ? 'lightbox' : 'fullscreen');
+        }
+
+        function closeCinemaPlayer() {
+            setPlayerMode('closed');
+        }
+
+        // Keyboard Shortcuts: I (Minimize), F (Fullscreen), ESC (Close)
+        document.addEventListener('keydown', function(e) {
+            if (playerMode === 'closed') return;
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+            const key = e.key.toLowerCase();
+            if (key === 'i') {
+                e.preventDefault();
+                toggleMiniPlayer();
+            } else if (key === 'f') {
+                e.preventDefault();
+                toggleFullPlayer();
+            } else if (key === 'escape') {
+                e.preventDefault();
+                if (playerMode === 'fullscreen') {
+                    setPlayerMode('lightbox');
+                } else {
+                    closeCinemaPlayer();
+                }
+            }
+        });
+    </script>
 
 </body>
 </html>
