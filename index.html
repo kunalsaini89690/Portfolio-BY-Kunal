@@ -432,7 +432,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(1);
-            width: 420px; /* Vertical 9:16 default width */
+            width: 380px; /* Vertical 9:16 default width */
             max-width: 92vw;
         }
         .cinema-player-shell.mode-lightbox.is-wide {
@@ -447,7 +447,7 @@
             bottom: 24px;
             right: 24px;
             transform: translate(0, 0) scale(1);
-            width: 240px;
+            width: 230px;
             border-color: #F2F0E6;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 20px rgba(242, 240, 230, 0.35);
         }
@@ -512,11 +512,11 @@
             border-color: #F2F0E6;
         }
 
-        /* Clean Title-Free Video Frame Mask */
+        /* Clean Title-Free & UI-Free Video Frame Mask */
         .clean-frame-container {
             position: relative;
             width: 100%;
-            padding-bottom: 177.77%; /* 9:16 Vertical */
+            padding-bottom: 170%; /* Slightly trimmed vertical container */
             background: #000;
             overflow: hidden;
         }
@@ -529,18 +529,33 @@
             height: calc(100vh - 48px);
         }
 
-        /* Slight vertical crop hides YouTube's top title bar & channel icon cleanly */
+        /* Crops top title bar AND bottom Shorts channel name + Like/Share buttons completely */
         .clean-frame-container iframe {
             position: absolute;
-            top: -58px;
+            top: -85px;
+            left: -6%;
+            width: 112%;
+            height: calc(100% + 225px);
+            border: 0;
+            pointer-events: auto;
+        }
+        .cinema-player-shell.is-wide .clean-frame-container iframe {
+            top: -65px;
             left: 0;
             width: 100%;
-            height: calc(100% + 116px);
-            border: 0;
+            height: calc(100% + 130px);
         }
         .cinema-player-shell.mode-mini .clean-frame-container iframe {
-            top: -40px;
-            height: calc(100% + 80px);
+            top: -55px;
+            left: -5%;
+            width: 110%;
+            height: calc(100% + 145px);
+        }
+        .cinema-player-shell.mode-mini.is-wide .clean-frame-container iframe {
+            top: -45px;
+            left: 0;
+            width: 100%;
+            height: calc(100% + 90px);
         }
 
         .player-shortcut-hint {
@@ -551,6 +566,7 @@
             padding: 6px 10px;
             letter-spacing: 0.8px;
             border-top: 1px solid rgba(255, 255, 255, 0.06);
+            z-index: 5;
         }
         .cinema-player-shell.mode-mini .player-shortcut-hint {
             display: none;
@@ -670,7 +686,7 @@
                 </div>
                 <div class="showreel-card">
                     <div class="video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Kunal Saini Showreel" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0&modestbranding=1&rel=0" title="Kunal Saini Showreel" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     </div>
                 </div>
             </section>
@@ -1153,8 +1169,8 @@
                 shell.classList.remove('is-wide');
             }
 
-            // Clean autoplay embed without related videos or annotations
-            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1&loop=1&playlist=${videoId}`;
+            // Clean autoplay embed with controls=0 & no branding/recommendations
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&disablekb=1&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1&loop=1&playlist=${videoId}`;
 
             setPlayerMode('lightbox');
         }
