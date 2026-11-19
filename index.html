@@ -519,12 +519,12 @@
         .clean-frame-container {
             position: relative;
             width: 100%;
-            padding-bottom: 170%; /* Slightly trimmed vertical container */
+            padding-bottom: 170%;
             background: #000;
             overflow: hidden;
         }
         .cinema-player-shell.is-wide .clean-frame-container {
-            padding-bottom: 56.25%; /* 16:9 Wide */
+            padding-bottom: 56.25%;
         }
         .cinema-player-shell.mode-fullscreen .clean-frame-container {
             padding-bottom: 0;
@@ -1004,7 +1004,7 @@
 
 
         <!-- ========================================================= -->
-        <!-- PAGE 3: MY WORK (OPTION 2: SEPARATE REELS & WIDE ROWS)    -->
+        <!-- PAGE 3: MY WORK (SEPARATE REELS & WIDE ROWS)              -->
         <!-- ========================================================= -->
         <section id="mywork-page" class="page-view">
             <div class="subpage-topbar">
@@ -1222,27 +1222,49 @@
         </div>
     </div>
 
-    <!-- Single-Page & Cinema Player Script -->
+    <!-- Single-Page, Browser Back-Button Support & Cinema Player Script -->
     <script>
-        function openPage(pageId) {
+        let currentActivePage = 'home-page';
+
+        function renderPage(pageId, scrollToTop = true) {
             document.querySelectorAll('.page-view').forEach(page => {
                 page.classList.remove('active');
             });
             const target = document.getElementById(pageId);
             if (target) {
                 target.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                currentActivePage = pageId;
+                if (scrollToTop) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+        }
+
+        function openPage(pageId, skipHistory = false) {
+            if (playerMode !== 'closed') {
+                setPlayerMode('closed', true);
+            }
+            renderPage(pageId, true);
+
+            if (!skipHistory) {
+                if (pageId === 'home-page') {
+                    history.pushState({ page: 'home-page', player: false }, '', window.location.pathname);
+                } else {
+                    history.pushState({ page: pageId, player: false }, '', `#${pageId}`);
+                }
             }
         }
 
         function goToSection(sectionId) {
-            openPage('home-page');
+            if (currentActivePage !== 'home-page') {
+                openPage('home-page');
+            }
             setTimeout(() => {
                 const section = document.getElementById(sectionId);
                 if (section) {
                     section.scrollIntoView({ behavior: 'smooth' });
                 }
-            }, 50);
+            }, 60);
         }
 
         // Cinema Player State
@@ -1263,13 +1285,14 @@
                 shell.classList.remove('is-wide');
             }
 
-            // Clean autoplay embed with controls=0 & no branding/recommendations
             iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&disablekb=1&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1&loop=1&playlist=${videoId}`;
 
-            setPlayerMode('lightbox');
+            setPlayerMode('lightbox', false);
+            history.pushState({ page: currentActivePage, player: true }, '', `#${currentActivePage}-watch`);
         }
 
-        function setPlayerMode(mode) {
+        function setPlayerMode(mode, skipHistory = false) {
+            const wasOpen = playerMode !== 'closed';
             playerMode = mode;
             shell.classList.remove('mode-lightbox', 'mode-mini', 'mode-fullscreen');
             backdrop.classList.remove('visible');
@@ -1290,22 +1313,49 @@
                 fullIcon.className = 'fas fa-compress';
             } else {
                 iframe.src = '';
+                if (wasOpen && !skipHistory && history.state && history.state.player) {
+                    history.back();
+                }
             }
         }
 
         function toggleMiniPlayer() {
             if (playerMode === 'closed') return;
-            setPlayerMode(playerMode === 'mini' ? 'lightbox' : 'mini');
+            setPlayerMode(playerMode === 'mini' ? 'lightbox' : 'mini', true);
         }
 
         function toggleFullPlayer() {
             if (playerMode === 'closed') return;
-            setPlayerMode(playerMode === 'fullscreen' ? 'lightbox' : 'fullscreen');
+            setPlayerMode(playerMode === 'fullscreen' ? 'lightbox' : 'fullscreen', true);
         }
 
         function closeCinemaPlayer() {
-            setPlayerMode('closed');
+            setPlayerMode('closed', false);
         }
+
+        // Handle Mobile & Browser Back Button / Swipe Gesture
+        window.addEventListener('popstate', function(event) {
+            if (playerMode !== 'closed') {
+                setPlayerMode('closed', true);
+                return;
+            }
+
+            if (event.state && event.state.page) {
+                renderPage(event.state.page, false);
+            } else {
+                const hashPage = window.location.hash.replace('#', '');
+                if (hashPage && document.getElementById(hashPage)) {
+                    renderPage(hashPage, false);
+                } else {
+                    renderPage('home-page', false);
+                }
+            }
+        });
+
+        // Initialize base history state on load
+        window.addEventListener('DOMContentLoaded', () => {
+            history.replaceState({ page: 'home-page', player: false }, '', window.location.pathname);
+        });
 
         // Keyboard Shortcuts: I (Minimize), F (Fullscreen), ESC (Close)
         document.addEventListener('keydown', function(e) {
@@ -1322,7 +1372,7 @@
             } else if (key === 'escape') {
                 e.preventDefault();
                 if (playerMode === 'fullscreen') {
-                    setPlayerMode('lightbox');
+                    setPlayerMode('lightbox', true);
                 } else {
                     closeCinemaPlayer();
                 }
