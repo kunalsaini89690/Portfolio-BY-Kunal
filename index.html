@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Viewport tag removed to force Desktop view on Mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kunal Saini | Visual Editor Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -16,8 +16,7 @@
             font-family: 'Montserrat', sans-serif;
             letter-spacing: 0.5px;
             line-height: 1.6;
-            /* Forces full desktop width layout everywhere */
-            min-width: 1200px;
+            overflow-x: hidden;
         }
 
         .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
@@ -79,7 +78,7 @@
             align-items: center;
             gap: 25px;
             margin-top: 25px;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;
         }
         .quick-item {
             color: #aaa;
@@ -246,6 +245,8 @@
             margin-top: 35px;
             padding-bottom: 15px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            gap: 12px;
+            flex-wrap: wrap;
         }
         .back-home-btn {
             background: transparent;
@@ -272,6 +273,7 @@
         .category-tabs {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
         .tab-pill {
             background: #141414;
@@ -437,6 +439,7 @@
         }
         .cinema-player-shell.mode-lightbox.is-wide {
             width: 920px;
+            max-width: 94vw;
         }
 
         /* Minimized Corner Mode (Pressed 'I') */
@@ -614,6 +617,97 @@
             text-align: center; padding: 40px 0; margin-top: 60px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             font-size: 12px; color: #666;
+        }
+
+        /* ========================================================= */
+        /* MOBILE OPTIMIZATION ONLY (DESKTOP > 768px UNTOUCHED)      */
+        /* ========================================================= */
+        @media (max-width: 768px) {
+            .container { padding: 0 14px; }
+
+            .header { padding: 12px 0; }
+            .nav-inner { flex-direction: column; gap: 10px; }
+            .logo { font-size: 19px; }
+            .nav-links {
+                gap: 12px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .nav-links a { font-size: 11px; letter-spacing: 0.8px; }
+
+            .hero-banner-section { padding: 20px 0 10px; }
+            .quick-contact-bar { gap: 14px; margin-top: 16px; }
+            .quick-item { font-size: 12px; }
+
+            .section-title { margin: 40px 0 22px; }
+            .section-title h2 { font-size: 19px; letter-spacing: 2px; }
+            .section-title p { font-size: 12px; }
+
+            /* Services Box Mobile */
+            .services-section {
+                padding: 30px 16px;
+                margin: 35px 0;
+            }
+            .services-title { font-size: 24px; margin-bottom: 24px; }
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .service-card { padding: 20px 16px; }
+            .service-icon { font-size: 36px; margin-bottom: 12px; }
+
+            /* Selected Works & Video Galleries Mobile */
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+            .video-showcase-grid,
+            .video-showcase-grid.wide-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+            .video-showcase-grid.reels-two-col {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .video-showcase-grid.reels-two-col .showcase-meta { padding: 12px; }
+            .video-showcase-grid.reels-two-col .showcase-title { font-size: 13px; }
+            .video-showcase-grid.reels-two-col .play-circle-btn { width: 46px; height: 46px; font-size: 16px; }
+
+            /* Subpage Topbar Mobile */
+            .subpage-topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-top: 20px;
+                gap: 12px;
+            }
+            .category-tabs { width: 100%; justify-content: flex-start; gap: 8px; }
+            .tab-pill { padding: 7px 12px; font-size: 10px; }
+
+            .gallery-group-header span { font-size: 11px; letter-spacing: 1.8px; }
+
+            /* Cinema Player Mobile Sizing */
+            .cinema-player-shell.mode-lightbox {
+                width: 88vw;
+                max-height: 86vh;
+            }
+            .cinema-player-shell.mode-lightbox.is-wide {
+                width: 94vw;
+            }
+            .cinema-player-shell.mode-mini {
+                width: 150px;
+                bottom: 14px;
+                right: 14px;
+            }
+            .cinema-player-shell.mode-mini.is-wide {
+                width: 220px;
+            }
+            .p-ctrl-btn { width: 32px; height: 32px; font-size: 13px; }
+            .player-shortcut-hint { display: none; }
+
+            .skills-wrapper { gap: 8px; }
+            .skill-tag { padding: 7px 14px; font-size: 11px; }
+            .footer { padding: 28px 0; margin-top: 40px; }
         }
     </style>
 </head>
